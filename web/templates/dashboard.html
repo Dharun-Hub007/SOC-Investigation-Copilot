@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="refresh" content="30">
+
+    <title>SOC Investigation Copilot</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header>
+
+        <div>
+
+            <h1>SOC Investigation Copilot</h1>
+
+            <p>
+                Security Operations Center Investigation Dashboard
+            </p>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                SYSTEM ONLINE
+
+            </div>
+
+
+            <!-- LOGOUT -->
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="logout-button"
+            >
+                LOGOUT
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+         ===================================================== -->
+
+    <section class="cards">
+
+
+        <!-- TOTAL -->
+
+        <div class="card">
+
+            <h3>
+                Total Alerts
+            </h3>
+
+            <div class="number">
+                {{ total }}
+            </div>
+
+        </div>
+
+
+        <!-- CRITICAL -->
+
+        <div class="card critical">
+
+            <h3>
+                Critical
+            </h3>
+
+            <div class="number">
+                {{ critical }}
+            </div>
+
+        </div>
+
+
+        <!-- HIGH -->
+
+        <div class="card high">
+
+            <h3>
+                High
+            </h3>
+
+            <div class="number">
+                {{ high }}
+            </div>
+
+        </div>
+
+
+        <!-- MEDIUM -->
+
+        <div class="card medium">
+
+            <h3>
+                Medium
+            </h3>
+
+            <div class="number">
+                {{ medium }}
+            </div>
+
+        </div>
+
+
+        <!-- LOW -->
+
+        <div class="card low">
+
+            <h3>
+                Low
+            </h3>
+
+            <div class="number">
+                {{ low }}
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ALERT PANEL
+         ===================================================== -->
+
+    <section class="panel">
+
+
+        <!-- PANEL HEADER -->
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    Recent Security Alerts
+                </h2>
+
+                <p>
+                    Alerts investigated by the SOC Investigation Copilot
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SEARCH + FILTER
+             ================================================= -->
+
+        <div class="alert-controls">
+
+
+            <!-- SEARCH -->
+
+            <input
+                type="text"
+                id="alertSearch"
+                placeholder="Search Alert ID, Agent or Rule ID..."
+                autocomplete="off"
+            >
+
+
+            <!-- SEVERITY -->
+
+            <select id="severityFilter">
+
+                <option value="all">
+                    All Severity
+                </option>
+
+                <option value="Critical">
+                    Critical
+                </option>
+
+                <option value="High">
+                    High
+                </option>
+
+                <option value="Medium">
+                    Medium
+                </option>
+
+                <option value="Low">
+                    Low
+                </option>
+
+            </select>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             ALERT TABLE
+             ================================================= -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Alert ID
+                        </th>
+
+                        <th>
+                            Agent
+                        </th>
+
+                        <th>
+                            Rule ID
+                        </th>
+
+                        <th>
+                            Severity
+                        </th>
+
+                        <th>
+                            Risk Score
+                        </th>
+
+                        <th>
+                            Risk Level
+                        </th>
+
+                        <th>
+                            MITRE
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for alert in alerts %}
+
+
+                    <tr
+                        class="alert-row"
+
+                        data-alert-id="{{ alert['alert_id'] }}"
+
+                        data-agent="{{ alert['agent_name'] }}"
+
+                        data-rule="{{ alert['rule_id'] }}"
+
+                        data-severity="{{ alert['risk_level'] }}"
+
+                        data-risk-level="{{ alert['risk_level'] }}"
+                    >
+
+
+                        <!-- ALERT ID -->
+
+                        <td>
+
+                            <a
+                                href="{{ url_for(
+                                    'alert_details',
+                                    alert_id=alert['alert_id']
+                                ) }}"
+                            >
+
+                                {{ alert['alert_id'] }}
+
+                            </a>
+
+                        </td>
+
+
+                        <!-- AGENT -->
+
+                        <td>
+
+                            {{ alert['agent_name'] }}
+
+                        </td>
+
+
+                        <!-- RULE -->
+
+                        <td>
+
+                            {{ alert['rule_id'] }}
+
+                        </td>
+
+
+                        <!-- SOC SEVERITY -->
+
+                        <td>
+
+                            <span class="badge severity">
+
+                                {{ alert['soc_severity'] }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- RISK SCORE -->
+
+                        <td>
+
+                            <strong>
+
+                                {{ alert['risk_score'] }}/100
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- RISK LEVEL -->
+
+                        <td>
+
+
+                            {% if alert['risk_level'] == 'Critical' %}
+
+                                <span class="badge critical-badge">
+                                    Critical
+                                </span>
+
+
+                            {% elif alert['risk_level'] == 'High' %}
+
+                                <span class="badge high-badge">
+                                    High
+                                </span>
+
+
+                            {% elif alert['risk_level'] == 'Medium' %}
+
+                                <span class="badge medium-badge">
+                                    Medium
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="badge low-badge">
+                                    Low
+                                </span>
+
+                            {% endif %}
+
+
+                        </td>
+
+
+                        <!-- MITRE -->
+
+                        <td>
+
+                            {{ alert['mitre_id'] }}
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            <span class="status-badge">
+
+                                {{ alert['investigation_status'] }}
+
+                            </span>
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% else %}
+
+
+                    <!-- NO ALERTS -->
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="no-alerts"
+                        >
+
+                            No alerts found.
+
+                        </td>
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+        <p>
+
+            SOC Investigation Copilot |
+            Wazuh + Python + SQLite + Flask
+
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     SEARCH + FILTER JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+
+const searchInput =
+    document.getElementById("alertSearch");
+
+
+const severityFilter =
+    document.getElementById("severityFilter");
+
+
+const alertRows =
+    document.querySelectorAll(".alert-row");
+
+
+
+function filterAlerts() {
+
+
+    const searchText =
+        searchInput.value
+            .toLowerCase()
+            .trim();
+
+
+    const selectedSeverity =
+        severityFilter.value
+            .toLowerCase();
+
+
+
+    alertRows.forEach(function(row) {
+
+
+        const alertId =
+            (row.dataset.alertId || "")
+                .toLowerCase();
+
+
+        const agent =
+            (row.dataset.agent || "")
+                .toLowerCase();
+
+
+        const rule =
+            (row.dataset.rule || "")
+                .toLowerCase();
+
+
+        const riskLevel =
+            (row.dataset.riskLevel || "")
+                .toLowerCase();
+
+
+
+        /*
+         * SEARCH MATCH
+         */
+
+        const matchesSearch =
+
+            alertId.includes(searchText) ||
+
+            agent.includes(searchText) ||
+
+            rule.includes(searchText) ||
+
+            riskLevel.includes(searchText);
+
+
+
+        /*
+         * SEVERITY MATCH
+         */
+
+        const matchesSeverity =
+
+            selectedSeverity === "all" ||
+
+            riskLevel === selectedSeverity;
+
+
+
+        /*
+         * DISPLAY
+         */
+
+        if (
+            matchesSearch &&
+            matchesSeverity
+        ) {
+
+            row.style.display = "";
+
+        }
+        else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+
+/*
+ * SEARCH EVENT
+ */
+
+searchInput.addEventListener(
+    "input",
+    filterAlerts
+);
+
+
+
+/*
+ * FILTER EVENT
+ */
+
+severityFilter.addEventListener(
+    "change",
+    filterAlerts
+);
+
+
+</script>
+
+
+</body>
+
+</html>

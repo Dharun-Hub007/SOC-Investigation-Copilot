@@ -1,0 +1,49 @@
+{
+  "id": "test-92052-001",
+  "timestamp": "2026-08-26T10:43:47.216Z",
+
+  "agent": {
+    "id": "001",
+    "name": "Acer",
+    "ip": "192.168.161.205"
+  },
+
+  "rule": {
+    "id": "92052",
+    "level": 4,
+    "description": "Windows command prompt started by an abnormal process",
+    "groups": [
+      "sysmon",
+      "sysmon_eid1_detections",
+      "windows"
+    ],
+    "mitre": {
+      "id": "T1059.003",
+      "tactic": "Execution",
+      "technique": "Windows Command Shell"
+    }
+  },
+
+  "data": {
+    "win": {
+      "system": {
+        "eventID": "1",
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "computer": "Acer"
+      },
+
+      "eventdata": {
+        "image": "C:\\Windows\\System32\\cmd.exe",
+        "commandLine": "C:\\WINDOWS\\system32\\cmd.exe /c \"C:\\Program Files\\Splunk\\bin\\splunk.exe\" show-decrypted",
+        "parentImage": "C:\\Program Files\\Splunk\\bin\\postgres.exe",
+        "parentCommandLine": "\"C:\\Program Files\\Splunk\\bin\\postgres.exe\" --forkchild=\"backend\" 6020",
+        "user": "NT SERVICE\\Splunkd",
+        "parentUser": "NT SERVICE\\Splunkd",
+        "integrityLevel": "High",
+        "processId": "17688",
+        "parentProcessId": "2392",
+        "hashes": "SHA256=8DD1EBB0B969370C70A5EE7F7EE347949AA7046AA5E1A33FCD7B1E9415B21FC3"
+      }
+    }
+  }
+}

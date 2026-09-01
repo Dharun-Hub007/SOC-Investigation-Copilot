@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Alert Details - SOC Investigation Copilot</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+
+        /* =====================================================
+           ALERT DETAILS PAGE
+           ===================================================== */
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            padding: 24px;
+        }
+
+        .details-grid > div {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 150, 255, 0.12);
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .details-grid .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .details-grid strong {
+            display: block;
+            color: #8fb8dc;
+            font-size: 13px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .details-grid p {
+            color: #ffffff;
+            font-size: 16px;
+            margin: 0;
+            word-break: break-word;
+        }
+
+
+        /* =====================================================
+           INVESTIGATION FINDINGS / RECOMMENDATIONS
+           ===================================================== */
+
+        .investigation-list {
+            padding: 20px 24px 24px;
+        }
+
+        .investigation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+
+            padding: 16px 18px;
+            margin-bottom: 12px;
+
+            background: rgba(255, 255, 255, 0.025);
+
+            border: 1px solid rgba(0, 150, 255, 0.12);
+
+            border-radius: 10px;
+
+            color: #dcecff;
+
+            line-height: 1.6;
+
+            font-size: 15px;
+        }
+
+        .investigation-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .investigation-icon {
+            flex-shrink: 0;
+
+            width: 28px;
+            height: 28px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: rgba(0, 150, 255, 0.12);
+
+            color: #00aaff;
+
+            font-weight: bold;
+
+            font-size: 15px;
+        }
+
+        .finding-item .investigation-icon {
+            color: #00aaff;
+        }
+
+        .recommendation-item .investigation-icon {
+            color: #00e676;
+        }
+
+
+        /* =====================================================
+           BADGES
+           ===================================================== */
+
+        .critical-badge {
+            color: #ffffff;
+            background: #b91c1c;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .high-badge {
+            color: #ffffff;
+            background: #c2410c;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .medium-badge {
+            color: #ffffff;
+            background: #a16207;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .low-badge {
+            color: #ffffff;
+            background: #047857;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           DOWNLOAD BUTTON
+           ===================================================== */
+
+        .download-section {
+            padding: 24px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 13px 22px;
+
+            border-radius: 8px;
+
+            background: linear-gradient(
+                90deg,
+                #087cff,
+                #00aaff
+            );
+
+            color: #ffffff;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            box-shadow:
+                0 0 20px rgba(0, 153, 255, 0.25);
+
+            transition: 0.2s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 0 28px rgba(0, 153, 255, 0.45);
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .details-grid .full-width {
+                grid-column: auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<script>
+
+const timestampElement =
+    document.getElementById("alertTimestamp");
+
+if (timestampElement) {
+
+    const timestamp =
+        timestampElement.textContent.trim();
+
+    if (
+        timestamp &&
+        timestamp !== "Not available"
+    ) {
+
+        try {
+
+            const date =
+                new Date(timestamp.replace("+0000", "Z"));
+
+            const options = {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+                timeZone: "Asia/Kolkata"
+            };
+
+            timestampElement.textContent =
+                date.toLocaleString(
+                    "en-IN",
+                    options
+                ) + " IST";
+
+        } catch (error) {
+
+            console.error(
+                "Timestamp conversion failed:",
+                error
+            );
+
+        }
+
+    }
+
+}
+
+</script>
+
+<body>
+
+<div class="container">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header>
+
+        <div>
+
+            <h1>SOC Alert Details</h1>
+
+            <p>
+                SOC Investigation Copilot
+            </p>
+
+        </div>
+
+        <div class="status">
+
+            <span class="status-dot"></span>
+
+            SYSTEM ONLINE
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         ALERT INFORMATION
+         ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>Alert Information</h2>
+
+                <p>
+                    Detailed investigation information
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="details-grid">
+
+            <div>
+                <strong>Alert ID</strong>
+                <p>{{ alert["alert_id"] }}</p>
+            </div>
+
+
+            <div>
+                <strong>Agent</strong>
+                <p>{{ alert["agent_name"] }}</p>
+            </div>
+
+
+            <div>
+                <strong>Agent IP</strong>
+                <p>
+                    {{ alert["agent_ip"] or "Not available" }}
+                </p>
+            </div>
+
+
+            <div>
+                <strong>Rule ID</strong>
+                <p>{{ alert["rule_id"] }}</p>
+            </div>
+
+
+            <div>
+                <strong>SOC Severity</strong>
+                <p>{{ alert["soc_severity"] }}</p>
+            </div>
+
+
+            <div>
+                <strong>Investigation Status</strong>
+                <p>{{ alert["investigation_status"] }}</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         RISK ASSESSMENT
+         ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>Risk Assessment</h2>
+
+                <p>
+                    SOC risk evaluation
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="details-grid">
+
+            <div>
+
+                <strong>Risk Score</strong>
+
+                <p>
+                    {{ alert["risk_score"] }}/100
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <strong>Risk Level</strong>
+
+                <p>
+
+                    {% if alert["risk_level"] == "Critical" %}
+
+                        <span class="badge critical-badge">
+                            Critical
+                        </span>
+
+                    {% elif alert["risk_level"] == "High" %}
+
+                        <span class="badge high-badge">
+                            High
+                        </span>
+
+                    {% elif alert["risk_level"] == "Medium" %}
+
+                        <span class="badge medium-badge">
+                            Medium
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge low-badge">
+                            Low
+                        </span>
+
+                    {% endif %}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INVESTIGATION FINDINGS
+         ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>Investigation Findings</h2>
+
+                <p>
+                    Security observations identified during analysis
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="investigation-list">
+
+            {% if alert["findings"] %}
+
+                <!--
+                    FIX:
+                    If findings is a string, display the complete
+                    string instead of looping through every character.
+                -->
+
+                {% if alert["findings"] is string %}
+
+                    <div class="investigation-item finding-item">
+
+                        <span class="investigation-icon">!</span>
+
+                        <span>
+                            {{ alert["findings"] }}
+                        </span>
+
+                    </div>
+
+                {% else %}
+
+                    {% for finding in alert["findings"] %}
+
+                        <div class="investigation-item finding-item">
+
+                            <span class="investigation-icon">!</span>
+
+                            <span>
+                                {{ finding }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% else %}
+
+                <div class="investigation-item">
+
+                    <span>
+                        No investigation findings available.
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         RECOMMENDATIONS
+         ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>Recommendations</h2>
+
+                <p>
+                    Recommended SOC analyst investigation actions
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="investigation-list">
+
+            {% if alert["recommendations"] %}
+
+                <!--
+                    FIX:
+                    If recommendations is a string, display the
+                    complete recommendation instead of characters.
+                -->
+
+                {% if alert["recommendations"] is string %}
+
+                    <div class="investigation-item recommendation-item">
+
+                        <span class="investigation-icon">+</span>
+
+                        <span>
+                            {{ alert["recommendations"] }}
+                        </span>
+
+                    </div>
+
+                {% else %}
+
+                    {% for recommendation in alert["recommendations"] %}
+
+                        <div class="investigation-item recommendation-item">
+
+                            <span class="investigation-icon">+</span>
+
+                            <span>
+                                {{ recommendation }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% else %}
+
+                <div class="investigation-item">
+
+                    <span>
+                        No recommendations available.
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         RULE INFORMATION
+         ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>Rule Information</h2>
+
+                <p>
+                    Wazuh detection rule details
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="details-grid">
+
+            <div>
+
+                <strong>Rule ID</strong>
+
+                <p>
+                    {{ alert["rule_id"] }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <strong>Wazuh Level</strong>
+
+                <p>
+                    {{ alert["wazuh_level"] }}
+                </p>
+
+            </div>
+
+
+            <div class="full-width">
+
+                <strong>Description</strong>
+
+                <p>
+                    {{ alert["rule_description"] }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MITRE ATT&CK
+         ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>MITRE ATT&CK</h2>
+
+                <p>
+                    Threat technique mapping
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="details-grid">
+
+            <div>
+
+                <strong>Technique ID</strong>
+
+                <p>
+                    {{ alert["mitre_id"] or "Not mapped" }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <strong>Tactic</strong>
+
+                <p>
+                    {{ alert["mitre_tactic"] or "Not available" }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <strong>Technique Name</strong>
+
+                <p>
+                    {{ alert["mitre_technique"] or "Not available" }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PROCESS INFORMATION
+         ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>Process Information</h2>
+
+                <p>
+                    Process and execution context
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="details-grid">
+
+            <div>
+
+                <strong>Process</strong>
+
+                <p>
+                    {{ alert["process_image"] or "Not available" }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <strong>Parent Process</strong>
+
+                <p>
+                    {{ alert["parent_process"] or "Not available" }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <strong>User</strong>
+
+                <p>
+                    {{ alert["user_name"] or "Not available" }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <strong>Timestamp</strong>
+
+<p>
+    <span id="alertTimestamp">
+        {{ alert["timestamp"] or "Not available" }}
+    </span>
+</p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INCIDENT REPORT
+         ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>Incident Report</h2>
+
+                <p>
+                    Download the investigation report
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="download-section">
+
+            <a
+                href="{{ url_for('generate_report', alert_id=alert['alert_id']) }}"
+                class="download-btn"
+            >
+
+                Download Investigation Report
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+        <p>
+            SOC Investigation Copilot |
+            Wazuh + Python + SQLite + Flask
+        </p>
+
+    </footer>
+
+
+</div>
+
+</body>
+
+</html>

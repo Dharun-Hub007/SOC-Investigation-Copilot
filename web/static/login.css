@@ -1,0 +1,638 @@
+/* =========================================================
+   SOC INVESTIGATION COPILOT
+   PROFESSIONAL LOGIN PAGE
+   ========================================================= */
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+
+    overflow: hidden;
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: #ffffff;
+
+    background:
+        radial-gradient(
+            circle at 50% 40%,
+            #0a3766 0%,
+            #061f3d 25%,
+            #031329 50%,
+            #010914 75%,
+            #00040b 100%
+        );
+}
+
+
+/* =========================================================
+   MAIN PAGE
+   ========================================================= */
+
+.login-page {
+
+    position: relative;
+
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND GLOW
+   ========================================================= */
+
+.background-glow {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    filter: blur(90px);
+
+    opacity: 0.25;
+}
+
+
+.glow-one {
+
+    width: 500px;
+    height: 500px;
+
+    top: -180px;
+    left: -150px;
+
+    background: #006eff;
+}
+
+
+.glow-two {
+
+    width: 450px;
+    height: 450px;
+
+    right: -150px;
+    bottom: -180px;
+
+    background: #008cff;
+}
+
+
+/* =========================================================
+   LOGIN CARD
+   ========================================================= */
+
+.login-card {
+
+    position: relative;
+
+    width: 500px;
+
+    min-height: 720px;
+
+    padding:
+        52px
+        55px
+        38px;
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(8, 35, 67, 0.98),
+            rgba(2, 18, 37, 0.99)
+        );
+
+    border: 1px solid rgba(0, 153, 255, 0.75);
+
+    box-shadow:
+
+        0 0 15px rgba(0, 132, 255, 0.55),
+
+        0 0 45px rgba(0, 119, 255, 0.25),
+
+        inset 0 0 35px rgba(0, 102, 204, 0.08);
+
+    text-align: center;
+
+    z-index: 5;
+}
+
+
+/* =========================================================
+   SHIELD
+   ========================================================= */
+
+.shield {
+
+    position: relative;
+
+    width: 68px;
+    height: 76px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 2px solid #25a9ff;
+
+    clip-path:
+        polygon(
+            50% 0%,
+            92% 15%,
+            86% 65%,
+            50% 100%,
+            14% 65%,
+            8% 15%
+        );
+
+    background:
+        rgba(0, 119, 255, 0.08);
+
+    box-shadow:
+        0 0 20px rgba(0, 153, 255, 0.5);
+}
+
+
+.shield-icon {
+
+    position: absolute;
+
+    font-size: 46px;
+
+    color: #4bc2ff;
+
+    opacity: 0.9;
+}
+
+
+.shield-lock {
+
+    position: absolute;
+
+    font-size: 19px;
+
+    margin-top: 8px;
+}
+
+
+/* =========================================================
+   SOC TITLE
+   ========================================================= */
+
+.soc-title {
+
+    font-size: 62px;
+
+    line-height: 1;
+
+    font-weight: 900;
+
+    letter-spacing: 9px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 12px rgba(255,255,255,0.45),
+        0 0 25px rgba(0,153,255,0.35);
+}
+
+
+/* =========================================================
+   COPILOT
+   ========================================================= */
+
+.copilot-title {
+
+    margin-top: 10px;
+
+    font-size: 19px;
+
+    line-height: 1.45;
+
+    font-weight: 800;
+
+    letter-spacing: 5px;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   SUBTITLE
+   ========================================================= */
+
+.subtitle {
+
+    margin-top: 12px;
+
+    font-size: 11px;
+
+    letter-spacing: 2.2px;
+
+    color: #a8c1d9;
+}
+
+
+/* =========================================================
+   ANALYST NAME
+   ========================================================= */
+
+.analyst-name {
+
+    margin-top: 27px;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+    color: #12a9ff;
+
+    text-shadow:
+        0 0 12px rgba(0, 157, 255, 0.7);
+}
+
+
+.analyst-role {
+
+    margin-top: 8px;
+
+    font-size: 11px;
+
+    letter-spacing: 4px;
+
+    color: #d6e4f2;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.divider {
+
+    width: 100%;
+
+    height: 1px;
+
+    margin: 27px auto 27px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #078cff,
+            transparent
+        );
+
+    box-shadow:
+        0 0 10px rgba(0, 140, 255, 0.7);
+}
+
+
+/* =========================================================
+   ACCESS TITLE
+   ========================================================= */
+
+.access-title {
+
+    font-size: 16px;
+
+    letter-spacing: 3px;
+
+    font-weight: 700;
+
+    color: #19b5ff;
+}
+
+
+.access-text {
+
+    margin-top: 9px;
+
+    font-size: 11px;
+
+    color: #819bb5;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.error-message {
+
+    margin-top: 15px;
+
+    padding: 10px 12px;
+
+    border-radius: 8px;
+
+    color: #ff7777;
+
+    background:
+        rgba(120, 0, 0, 0.25);
+
+    border:
+        1px solid rgba(255, 80, 80, 0.45);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   INPUT BOX
+   ========================================================= */
+
+.input-box {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 62px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.input-box input {
+
+    width: 100%;
+
+    height: 62px;
+
+    padding:
+        0 18px
+        0 58px;
+
+    border-radius: 11px;
+
+    border: 1px solid rgba(0, 153, 255, 0.75);
+
+    outline: none;
+
+    background:
+        rgba(0, 9, 22, 0.78);
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    transition:
+        0.25s ease;
+
+    box-shadow:
+        inset 0 0 15px rgba(0, 80, 150, 0.08);
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+   ========================================================= */
+
+.input-box input::placeholder {
+
+    color: #8095aa;
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   INPUT FOCUS
+   ========================================================= */
+
+.input-box input:focus {
+
+    border-color: #10aeff;
+
+    background:
+        rgba(0, 15, 32, 0.95);
+
+    box-shadow:
+        0 0 12px rgba(0, 153, 255, 0.35),
+
+        inset 0 0 12px rgba(0, 130, 255, 0.08);
+}
+
+
+/* =========================================================
+   INPUT ICON
+   ========================================================= */
+
+.input-icon {
+
+    position: absolute;
+
+    left: 19px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 20px;
+
+    z-index: 2;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.login-button {
+
+    width: 100%;
+
+    height: 62px;
+
+    margin-top: 25px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            100deg,
+            #087cff,
+            #08a8ef
+        );
+
+    box-shadow:
+
+        0 0 15px rgba(0, 136, 255, 0.6),
+
+        0 0 35px rgba(0, 136, 255, 0.25);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* =========================================================
+   BUTTON HOVER
+   ========================================================= */
+
+.login-button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+
+        0 0 20px rgba(0, 153, 255, 0.8),
+
+        0 0 45px rgba(0, 153, 255, 0.35);
+}
+
+
+/* =========================================================
+   BUTTON ACTIVE
+   ========================================================= */
+
+.login-button:active {
+
+    transform:
+        translateY(1px);
+
+    box-shadow:
+        0 0 10px rgba(0, 153, 255, 0.6);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.secure-footer {
+
+    margin-top: 28px;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+
+    color: #168ed0;
+
+    opacity: 0.9;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-height: 800px) {
+
+    .login-card {
+
+        transform:
+            scale(0.88);
+
+        transform-origin:
+            center center;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    body {
+        overflow-y: auto;
+    }
+
+    .login-page {
+
+        min-height: 100vh;
+
+        height: auto;
+
+        padding: 25px 15px;
+    }
+
+    .login-card {
+
+        width: 100%;
+
+        min-height: auto;
+
+        padding:
+            40px 28px
+            30px;
+    }
+
+    .soc-title {
+
+        font-size: 50px;
+    }
+
+    .copilot-title {
+
+        font-size: 16px;
+    }
+
+    .analyst-name {
+
+        font-size: 18px;
+    }
+}

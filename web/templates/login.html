@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SOC Investigation Copilot</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='login.css') }}">
+</head>
+
+
+<body>
+
+    <div class="login-page">
+
+        <!-- Background glow -->
+        <div class="background-glow glow-one"></div>
+        <div class="background-glow glow-two"></div>
+
+
+        <!-- LOGIN CARD -->
+
+        <div class="login-card">
+
+            <!-- Shield -->
+
+            <div class="shield">
+                <div class="shield-icon">♢</div>
+                <div class="shield-lock">🔒</div>
+            </div>
+
+
+            <!-- Title -->
+
+            <div class="soc-title">
+                SOC
+            </div>
+
+            <div class="copilot-title">
+                INVESTIGATION<br>
+                COPILOT
+            </div>
+
+            <div class="subtitle">
+                SECURITY OPERATIONS CENTER
+            </div>
+
+
+            <!-- Analyst -->
+
+            <div class="analyst-name">
+                DHARUN PRASATH
+            </div>
+
+            <div class="analyst-role">
+                SECURITY ANALYST
+            </div>
+
+
+            <!-- Divider -->
+
+            <div class="divider"></div>
+
+
+            <!-- Access -->
+
+            {% if setup %}
+
+            <h2 class="access-title">
+                INITIAL SECURITY SETUP
+            </h2>
+
+            <p class="access-text">
+                Create your SOC analyst credentials
+            </p>
+
+            {% else %}
+
+            <h2 class="access-title">
+                AUTHORIZED ACCESS
+            </h2>
+
+            <p class="access-text">
+                Enter your SOC analyst credentials
+            </p>
+
+            {% endif %}
+
+
+            <!-- Error -->
+
+            {% if error %}
+
+            <div class="error-message">
+                ⚠ {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <!-- LOGIN FORM -->
+
+            <form method="POST"
+                  action="{{ url_for('login') }}">
+
+
+                <!-- Username -->
+
+                <div class="input-box">
+
+                    <span class="input-icon">
+                        👤
+                    </span>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="input-box">
+
+                    <span class="input-icon">
+                        🔒
+                    </span>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Confirm password -->
+
+                {% if setup %}
+
+                <div class="input-box">
+
+                    <span class="input-icon">
+                        🔐
+                    </span>
+
+                    <input
+                        type="password"
+                        name="confirm_password"
+                        placeholder="Confirm Password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- Login button -->
+
+                <button
+                    type="submit"
+                    class="login-button">
+
+                    {% if setup %}
+                        CREATE SECURE ACCOUNT
+                    {% else %}
+                        SECURE LOGIN
+                    {% endif %}
+
+                </button>
+
+            </form>
+
+
+            <!-- Footer -->
+
+            <div class="secure-footer">
+                🔐 &nbsp; AUTHORIZED ACCESS ONLY
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+======================================================================
+                 SOC INVESTIGATION REPORT
+======================================================================
+
+ALERT INFORMATION
+----------------------------------------------------------------------
+Alert ID      : test-92052-001
+Agent         : Acer
+Agent IP      : 192.168.161.205
+
+RISK ASSESSMENT
+----------------------------------------------------------------------
+Risk Score    : 80/100
+Risk Level    : Critical
+
+FINDINGS
+----------------------------------------------------------------------
+[!] Suspicious command execution was detected.
+[!] An unusual parent-child process relationship was detected.
+[!] The process executed with High integrity.
+[!] The alert is associated with a MITRE ATT&CK technique.
+[!] Windows Command Shell execution was observed.
+
+RECOMMENDATIONS
+----------------------------------------------------------------------
+[+] Review the complete command line and determine whether the command was expected.
+[+] Investigate the parent process and determine why it launched the child process.
+[+] Verify whether elevated privileges were required.
+[+] Prioritize this alert for SOC analyst investigation.
+[+] Check related events around the same timestamp.
+[+] Investigate the process tree and user activity.
+
+REPORT INFORMATION
+----------------------------------------------------------------------
+Generated At  : 2026-08-26 14:12:33
+
+======================================================================
